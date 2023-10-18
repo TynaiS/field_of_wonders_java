@@ -1,1 +1,4 @@
-.class
+*.class
+.idea/
+field_of_wonders_java.iml
+out/
