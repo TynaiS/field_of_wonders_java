@@ -11,6 +11,8 @@ public class Field {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
+    private  static  final int ONE_LETTER_LENGTH = 1;
+
     private static final Map<Integer, String> WORDS_AND_DESCRIPTIONS = Map.of(
             0,
             "консьерж@Человек, в чьи обязанности входят обеспечение постояльцев в гостинице или жильцов дома всем необходимым и создание для них комфортных условий.",
@@ -52,11 +54,10 @@ public class Field {
         goThroughPlayersAndPlay(playersList, shuffledPlayersIndexes, selectedWordAndDefinition);
     }
 
-    private static void goThroughPlayersAndPlay(Map<Integer, ArrayList> playersList, int[] shuffledPlayersIndexes,
-            String[] selectedWordAndDefinition) {
+    private static void goThroughPlayersAndPlay(Map<Integer, ArrayList> playersList, int[] shuffledPlayersIndexes, String[] selectedWordAndDefinition) {
         boolean keepAskingPlayers = true;
         int halfOfMaxWordScore = 0;
-        boolean onlyGuessByWord = false;
+        boolean isOnlyGuessByWord = false;
         String contenderForWin = "";
 
         String[] selectedWordHidden = new String[selectedWordAndDefinition[0].length()];
@@ -97,7 +98,7 @@ public class Field {
                     String uncheckedPlayerQuess = SCANNER.nextLine().trim().toLowerCase();
                     if (uncheckedPlayerQuess.length() == 0) {
                         System.out.println("Введите букву или слово:");
-                    } else if(String.join("", selectedWordHidden).contains(uncheckedPlayerQuess) && !onlyGuessByWord) {
+                    } else if(String.join("", selectedWordHidden).contains(uncheckedPlayerQuess) && !isOnlyGuessByWord) {
                         System.out.println("Эта буква уже отгадана, попробуйте другую букву или слово:");
                     } else {
                         playerQuess = uncheckedPlayerQuess;
@@ -106,7 +107,7 @@ public class Field {
 
                 handleUserQuitOrRestart(playerQuess);
 
-                if (playerQuess.length() == 1 && onlyGuessByWord == false) {
+                if (playerQuess.length() == ONE_LETTER_LENGTH && isOnlyGuessByWord == false) {
                     if (selectedWordAndDefinition[0].contains(playerQuess)) {
                         System.out.println("\nБраво!");
 
@@ -134,7 +135,7 @@ public class Field {
                         }
 
                         if(currentPlayerScore > halfOfMaxWordScore) {
-                            onlyGuessByWord = true;
+                            isOnlyGuessByWord = true;
                             System.out.println("\nУ вас слишком много очков, " + currentPlayerName + ", дайте другим угадать слово!");
                             contenderForWin = currentPlayerName;
                             continue;
@@ -144,7 +145,7 @@ public class Field {
                         System.out.println("\nДа ладно...");
                     }
                 }
-                else if(playerQuess.length() > 1 || onlyGuessByWord == true) {
+                else if(playerQuess.length() > 1 || isOnlyGuessByWord == true) {
                     if(currentPlayerName.equals(contenderForWin)){
                         keepAskingPlayers = false;
                         System.out.println("\nВы победили, " + contenderForWin + ", никто не угадал слово!");
